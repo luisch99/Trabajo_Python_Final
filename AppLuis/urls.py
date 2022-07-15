@@ -3,8 +3,8 @@ from .views import *
 
 
 urlpatterns = [
-    path('Familia/', Familia),
-    path('Carrera/', Carrera),
-    path('Mascotas/', Mascotas),
-    path('', inicio),
+    path('Familia/', Familia, name='Familia'),
+    path('Carrera/', Carrera, name='Carrera'),
+    path('Mascotas/', Mascotas, name='Mascotas'),
+    path('', inicio, name='Inicio'),
 ]
