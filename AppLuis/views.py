@@ -1,7 +1,11 @@
-from email.errors import NoBoundaryInMultipartDefect
+
+from ast import Return
+from urllib import request
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, HttpResponse
 from AppLuis.models import Carrera, Familia, Mascotas
+from AppLuis.forms import FamiliaForm, CarreraForm
+
 # Create your views here.
 
 def Fami(self):
@@ -63,3 +67,52 @@ def Carrera(request):
 
 def Mascotas(request):
     return render(request, "AppLuis/Mascotas.html")
+
+def Formulario(request):
+
+    if (request.method=="POST"):
+        form=FamiliaForm(request.POST)
+        print(form)
+        if form.is_valid():
+            info=form.cleaned_data
+            print(info)
+            nombre=info["nombre"]
+            apellido=info["apellido"]
+            tlf=info["tlf"]
+            FechNac=info["FechNac"]
+            familia= Familia(nombre=nombre, apellido=apellido, tlf=tlf, FechNac=FechNac)
+            familia.save()
+            return render (request, "AppLuis/inicio.html")
+    else:
+        form=FamiliaForm()
+    return render(request, "AppLuis/Formulario.html", {"formulario":form})
+
+
+def carreraFormulario(request):
+
+    if request.method=="POST":
+        form= CarreraForm(request.POST)
+        if form.is_valid():
+            info= form.cleaned_data
+            profesion= info["profesion"]
+            Universidad= info["Universidad"]
+            email= info["email"]
+            carrera= Carrera(profesion=profesion, Universidad=Universidad, email=email)
+            carrera.save()
+            return render (request, "AppLuis/inicio.html")
+    else:
+        form=CarreraForm()
+    return render(request, "AppLuis/carreraForm.html", {"formulario":form})
+    
+
+def busquedaNombre(request):
+    return render(request, "AppLuis/busquedaNombre.html")
+
+def buscar(request):
+    if request.GET["nombre"]:
+        nomb= request.GET["nombre"]
+        familias=Familia.objects.filter(nombre=nomb)
+        return render(request, "AppLuis/resultadosBuqueda.html", {"familias":familias})
+    else:
+        return render(request, "AppLuis/busquedaNombre.html", {"error": "No se ingreso ningun nombre"})
+    
