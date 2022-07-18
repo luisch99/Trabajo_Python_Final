@@ -11,3 +11,8 @@ class CarreraForm(forms.Form):
     profesion = forms.CharField(max_length=50)
     Universidad = forms.CharField(max_length=50)
     email =forms.EmailField()
+
+class MascotasForm(forms.Form):
+    nombre = forms.CharField(max_length=50)
+    Tipo = forms.CharField(max_length=50)
+    Raza =forms.CharField(max_length=50)

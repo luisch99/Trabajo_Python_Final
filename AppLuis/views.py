@@ -4,7 +4,7 @@ from urllib import request
 from django.http import HttpResponse
 from django.shortcuts import render, HttpResponse
 from AppLuis.models import Carrera, Familia, Mascotas
-from AppLuis.forms import FamiliaForm, CarreraForm
+from AppLuis.forms import FamiliaForm, CarreraForm, MascotasForm
 
 # Create your views here.
 
@@ -59,13 +59,13 @@ def Masco(self):
 def inicio(request):
     return render(request, "AppLuis/inicio.html")
 
-def Familia(request):
+def Familias(request):
     return render(request, "AppLuis/Familia.html")
 
-def Carrera(request):
+def Carreras(request):
     return render(request, "AppLuis/Carrera.html")
 
-def Mascotas(request):
+def Mascotass(request):
     return render(request, "AppLuis/Mascotas.html")
 
 def Formulario(request):
@@ -104,6 +104,22 @@ def carreraFormulario(request):
         form=CarreraForm()
     return render(request, "AppLuis/carreraForm.html", {"formulario":form})
     
+def mascotasFormulario(request):
+
+    if request.method=="POST":
+        form= MascotasForm(request.POST)
+        if form.is_valid():
+            info= form.cleaned_data
+            nombre= info["nombre"]
+            Tipo= info["Tipo"]
+            Raza= info["Raza"]
+            mascotas= MascotasForm(nombre=nombre, Tipo=Tipo, Raza=Raza)
+            mascotas.save()
+            return render (request, "AppLuis/inicio.html")
+    else:
+        form=MascotasForm()
+    return render(request, "AppLuis/mascotasForm.html", {"formulario":form})
+    
 
 def busquedaNombre(request):
     return render(request, "AppLuis/busquedaNombre.html")
@@ -112,7 +128,7 @@ def buscar(request):
     if request.GET["nombre"]:
         nomb= request.GET["nombre"]
         familias=Familia.objects.filter(nombre=nomb)
-        return render(request, "AppLuis/resultadosBuqueda.html", {"familias":familias})
+        return render(request, "AppLuis/resultadosBusqueda.html", {"familias":familias})
     else:
         return render(request, "AppLuis/busquedaNombre.html", {"error": "No se ingreso ningun nombre"})
     
